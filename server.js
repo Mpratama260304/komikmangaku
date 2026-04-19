@@ -17,7 +17,7 @@ const CONFIG = {
   ORIGIN_PROTOCOL: process.env.ORIGIN_PROTOCOL || "https",
 
   // Your mirror domain (set this to your actual domain)
-  MIRROR_DOMAIN: process.env.MIRROR_DOMAIN || "komikmangaku.com",
+  MIRROR_DOMAIN: process.env.MIRROR_DOMAIN || "",
 
   // Server port
   PORT: parseInt(process.env.PORT, 10) || 3000,
@@ -531,11 +531,13 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// Serve custom mirror assets (CSS/JS overrides)
-app.use("/mirror-assets", express.static(path.join(__dirname, "public"), {
-  maxAge: "7d",
-  immutable: true,
-}));
+// Serve custom mirror assets (CSS/JS overrides) — dedicated route for reliability
+const CUSTOM_CSS = require("fs").readFileSync(path.join(__dirname, "public", "css", "custom.css"), "utf-8");
+app.get("/mirror-assets/css/custom.css", (req, res) => {
+  res.setHeader("Content-Type", "text/css; charset=utf-8");
+  res.setHeader("Cache-Control", "public, max-age=604800, immutable");
+  res.status(200).send(CUSTOM_CSS);
+});
 
 // Health check endpoint
 app.get("/health", (req, res) => {
