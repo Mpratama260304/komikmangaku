@@ -1,0 +1,10 @@
+[build]
+  builder = "NIXPACKS"
+
+[deploy]
+  startCommand = "node server.js"
+
+[variables]
+  ORIGIN_HOST = "komik.mangaku.asia"
+  ORIGIN_PROTOCOL = "https"
+  PORT = "3000"

@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: komikmangaku-mirror
+    runtime: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: ORIGIN_HOST
+        value: komik.mangaku.asia
+      - key: ORIGIN_PROTOCOL
+        value: https
+      - key: MIRROR_DOMAIN
+        sync: false
+      - key: PORT
+        value: 3000
